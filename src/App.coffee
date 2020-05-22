@@ -26,7 +26,7 @@ export default class App extends React.Component
 
     xfunc = 'x(p,q,t) = sin(p*t) + 3sin(q*t)'
     yfunc = 'y(p,q,t) = cos(p*t) + 3cos(q*t)'
-    zfunc = "z(p,q,t) = 2cos(11*t+1.57) + #{y/200}-2.5"
+    zfunc = "z(p,q,t) = 2cos(4*t+1.57) + #{y/200}-2.5"
     parser = mathjs.parser()
     parser.evaluate(xfunc)
     parser.evaluate(yfunc)
@@ -54,14 +54,14 @@ export default class App extends React.Component
       {x,y,z}
 
     tangent_to_curve = (t)->
-      [p, q]  = [2, -10]
+      [p, q]  = [1, -3]
       x = p*Math.cos(p*t) + 3*q*Math.cos(q*t)
       y = -p*Math.sin(p*t) - 3*q*Math.sin(q*t)
-      z = -22*Math.sin(11*t + 1.57)
+      z = -8*Math.sin(4*t + 1.57)
       return {x, y, z}
 
     param_curve = (t)->
-      [p, q]  = [2, -10]
+      [p, q]  = [1, -3]
 
       x = parser.get('x')(p,q,t)
       y = parser.get('y')(p,q,t)
@@ -116,8 +116,7 @@ export default class App extends React.Component
       {x,y} = p2
       path += "#{x0 + x*S},#{y0 - y*S} "
 
-    console.log path
-    return path
+    return path[..-2]
      
   render: ->
     {x, y} = @state
@@ -127,7 +126,7 @@ export default class App extends React.Component
       "foo #{x} #{y}"
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 #{width} #{height}">
         <g fill="#ff443311">
-          <path stroke="blue" strokeWidth="7" strokeOpacity="0.2" d="
+          <path stroke="blue" strokeWidth="3" strokeOpacity="0.2" d="
            M #{@get_path(1, {width, height})}
           " />
         </g> </svg>
