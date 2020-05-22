@@ -18,6 +18,7 @@ export default class App extends React.Component
 
   get_path:(a, {width, height})=>
     {x, y} = @state
+    R = x/500
     N = 2040
     trange = [0..N]
     T_scale = N
@@ -67,7 +68,6 @@ export default class App extends React.Component
       y = parser.get('y')(p,q,t)
       z = parser.get('z')(p,q,t)
       vr = {x, y, z}
-      R = 0.76
       if z>R
         p = x:NaN, y:NaN
         return [p,p]
@@ -126,7 +126,7 @@ export default class App extends React.Component
       "foo #{x} #{y}"
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 #{width} #{height}">
         <g fill="#ff443311">
-          <path stroke="blue" strokeWidth="3" strokeOpacity="0.2" d="
+          <path stroke="blue" strokeWidth="2" strokeOpacity="0.5" d="
            M #{@get_path(1, {width, height})}
           " />
         </g> </svg>
