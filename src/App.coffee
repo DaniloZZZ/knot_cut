@@ -18,7 +18,7 @@ export default class App extends React.Component
 
   get_path:(a, {width, height})=>
     {x, y} = @state
-    N = 1040
+    N = 2040
     trange = [0..N]
     T_scale = N
     path = ""
@@ -26,7 +26,7 @@ export default class App extends React.Component
 
     xfunc = 'x(p,q,t) = sin(p*t) + 3sin(q*t)'
     yfunc = 'y(p,q,t) = cos(p*t) + 3cos(q*t)'
-    zfunc = "z(p,q,t) = 2cos(4*t+1.57) + #{y/200}-2.5"
+    zfunc = "z(p,q,t) = 2cos(11*t+1.57) + #{y/200}-2.5"
     parser = mathjs.parser()
     parser.evaluate(xfunc)
     parser.evaluate(yfunc)
@@ -54,14 +54,14 @@ export default class App extends React.Component
       {x,y,z}
 
     tangent_to_curve = (t)->
-      [p, q]  = [2, -3]
+      [p, q]  = [2, -10]
       x = p*Math.cos(p*t) + 3*q*Math.cos(q*t)
       y = -p*Math.sin(p*t) - 3*q*Math.sin(q*t)
-      z = -8*Math.sin(4*t + 1.57)
+      z = -22*Math.sin(11*t + 1.57)
       return {x, y, z}
 
     param_curve = (t)->
-      [p, q]  = [2, -3]
+      [p, q]  = [2, -10]
 
       x = parser.get('x')(p,q,t)
       y = parser.get('y')(p,q,t)
@@ -107,12 +107,16 @@ export default class App extends React.Component
     for t in trange
       [p1, p2] = param_curve(t/T_scale*6.28)
       if not p1.x
+        if path[-1..][0]!='M' and  path.length>0
+          path +='z M'
         continue
       {x,y} = p1
       S = 50
       path += "#{x0 + x*S},#{y0 - y*S} "
       {x,y} = p2
       path += "#{x0 + x*S},#{y0 - y*S} "
+
+    console.log path
     return path
      
   render: ->
@@ -123,8 +127,8 @@ export default class App extends React.Component
       "foo #{x} #{y}"
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 #{width} #{height}">
         <g fill="#ff443311">
-          <path stroke="blue" strokeWidth="2" d="
-          M #{@get_path(1, {width, height})}
+          <path stroke="blue" strokeWidth="7" strokeOpacity="0.2" d="
+           M #{@get_path(1, {width, height})}
           " />
         </g> </svg>
 
