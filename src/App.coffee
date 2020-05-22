@@ -18,7 +18,8 @@ export default class App extends React.Component
 
   get_path:(a, {width, height})=>
     {x, y} = @state
-    R = x/500
+    xPos = x
+    R = 1
     N = 2040
     trange = [0..N]
     T_scale = N
@@ -56,13 +57,14 @@ export default class App extends React.Component
 
     tangent_to_curve = (t)->
       [p, q]  = [1, -3]
+      [p, q]  = [1, 5-xPos/100]
       x = p*Math.cos(p*t) + 3*q*Math.cos(q*t)
       y = -p*Math.sin(p*t) - 3*q*Math.sin(q*t)
       z = -8*Math.sin(4*t + 1.57)
       return {x, y, z}
 
     param_curve = (t)->
-      [p, q]  = [1, -3]
+      [p, q]  = [1, 5-xPos/100]
 
       x = parser.get('x')(p,q,t)
       y = parser.get('y')(p,q,t)
@@ -76,8 +78,8 @@ export default class App extends React.Component
       #vx = vec_prod(vr, vz)
       #vy = vec_prod(vz, vx)
       vzar = [vz.x, vz.y, vz.z]
-      #vxar = mathjs.cross(vzar, [vr.x, vr.y, vr.z])
-      vxar = mathjs.cross([vr.x, vr.y, vr.z], vzar)
+      vxar = mathjs.cross(vzar, [vr.x, vr.y, vr.z])
+      #vxar = mathjs.cross([vr.x, vr.y, vr.z], vzar)
       vyar = mathjs.cross(vxar, vzar)
        
       #change for other plane
