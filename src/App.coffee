@@ -19,8 +19,8 @@ export default class App extends React.Component
   get_path:(a, {width, height})=>
     {x, y} = @state
     xPos = x
-    R = 1
-    N = 640
+    R = .7
+    N = 2640
     trange = [0..N]
     T_scale = N
     path = ""
@@ -165,8 +165,15 @@ export default class App extends React.Component
 
     L.div className:'app', onMouseMove:@mouseMove,
       "foo #{x} #{y}"
+
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 #{width} #{height}">
-        <g fill="#ff443311">
+        <defs>
+          <linearGradient spreadMethod="pad" id="gradient" gradientTransform="rotate(-135) translate(-.5, -.5)" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="rgb(42, 11, 152)" stopOpacity="1" />
+            <stop offset="100%" stopColor="rgb(249, 0, 255)" stopOpacity="1" />
+          </linearGradient>
+        </defs>
+        <g fill="url(#gradient)" fillRule='nonzero'>
           <path stroke="blue" strokeWidth="2" strokeOpacity="0.5" d="
            M #{@get_path(1, {width, height})}
           " />
