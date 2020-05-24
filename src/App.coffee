@@ -84,11 +84,15 @@ export default class App extends React.Component
       y = parser.get('y')(p,q,t)
       z = parser.get('z')(p,q,t)
       vr = {x, y, z}
+      vz =  tangent_to_curve(t)
+      collin = Math.abs dot_prod(slice_plane, norm_v(vz))
+      W = 20
+      dt = W/(1 + W*collin) *.003
+      console.log dt
       if dot_prod(vr, slice_plane)>R
         p = x:NaN, y:NaN
-        return [p,p]
+        return [p,p, dt]
 
-      vz =  tangent_to_curve(t)
       #vx = vec_prod(vr, vz)
       #vy = vec_prod(vz, vx)
       vzar = [vz.x, vz.y, vz.z]
@@ -128,14 +132,16 @@ export default class App extends React.Component
       {x,y} = pcirc(theta)
 
       #console.log x,y,z, 'th', theta, K, t,'ab', a, b, vx, vy, 'rz', vr, vz,'t',t
-      return [{x,y}, pcirc(theta2)]
+      return [{x,y}, pcirc(theta2), dt]
 
 
 
     [x0, y0, z0] = [width/2, height/2, 0]
     current_batch = []
-    for t in trange
-      [p1, p2] = param_curve(t/T_scale*6.28)
+    t = 0
+    while t<(3.1415*2 + 0.005)
+      [p1, p2, dt] = param_curve(t)
+      t += dt
       if not p1.x
         S = 50
         for p in current_batch
