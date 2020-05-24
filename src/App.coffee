@@ -75,7 +75,7 @@ export default class App extends React.Component
       y: Math.sin(al)*Math.sin(ph)
       z: Math.cos(al)
 
-    console.log 'slice_plane', slice_plane
+    #console.log 'slice_plane', slice_plane
 
     param_curve = (t)->
       [p, q]  = [1, -3]
@@ -84,7 +84,7 @@ export default class App extends React.Component
       y = parser.get('y')(p,q,t)
       z = parser.get('z')(p,q,t)
       vr = {x, y, z}
-      if z>R
+      if dot_prod(vr, slice_plane)>R
         p = x:NaN, y:NaN
         return [p,p]
 
@@ -106,7 +106,7 @@ export default class App extends React.Component
 
       K = -cos_ro/R/Math.sign(a)/Math.sqrt(a*a + b*b)
       cos_th = slice_plane.z
-      sin_th = Math.sin al
+      sin_th = Math.sqrt 1-cos_th*cos_th
       local_ort =
         x: slice_plane.x/sin_th
         y: slice_plane.y/sin_th
@@ -127,23 +127,27 @@ export default class App extends React.Component
       theta2 = -acos_ + atan_
       {x,y} = pcirc(theta)
 
-      #console.log x,y,z, 'th', theta, K, t,'ab', a, b, vx, vy
+      #console.log x,y,z, 'th', theta, K, t,'ab', a, b, vx, vy, 'rz', vr, vz,'t',t
       return [{x,y}, pcirc(theta2)]
 
 
 
     [x0, y0, z0] = [width/2, height/2, 0]
+    current_batch = []
     for t in trange
       [p1, p2] = param_curve(t/T_scale*6.28)
       if not p1.x
-        if path[-1..][0]!='M' and  path.length>0
+        S = 50
+        for p in current_batch
+          {x,y} = p
+          path += "#{x0 + x*S},#{y0 - y*S} "
+
+        if path.length>0 and path[path.length-1]!='M'
           path +='z M'
-        continue
-      {x,y} = p1
-      S = 50
-      path += "#{x0 + x*S},#{y0 - y*S} "
-      {x,y} = p2
-      path += "#{x0 + x*S},#{y0 - y*S} "
+        current_batch = []
+      else
+        current_batch.unshift p1
+        current_batch.push p2
 
     return path[..-2]
      
