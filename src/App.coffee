@@ -20,15 +20,20 @@ export default class App extends React.Component
     {x, y} = @state
     xPos = x
     R = 1
-    N = 2040
+    N = 240
     trange = [0..N]
     T_scale = N
     path = ""
-    console.log 're'
 
+    ###
     xfunc = 'x(p,q,t) = sin(p*t) + 3sin(q*t)'
     yfunc = 'y(p,q,t) = cos(p*t) + 3cos(q*t)'
-    zfunc = "z(p,q,t) = 2cos(4*t+1.57) + #{y/200}-2.5"
+    zfunc = "z(p,q,t) = 2cos(4*t+1.57)"
+    ###
+
+    xfunc = 'x(p,q,t) = 2p*t-2'
+    yfunc = 'y(p,q,t) = 0'
+    zfunc = 'z(p,q,t) = 0.1'
     parser = mathjs.parser()
     parser.evaluate(xfunc)
     parser.evaluate(yfunc)
@@ -54,17 +59,34 @@ export default class App extends React.Component
       b = dict_to_list(norm_v(b))
       [x,y,z] = mathjs.cross(a,b)
       {x,y,z}
+    dot_prod = (a,b)->
+      a = dict_to_list(a)
+      b = dict_to_list(b)
+      v = mathjs.dot(a,b)
+      v
 
     tangent_to_curve = (t)->
       [p, q]  = [1, -3]
-      [p, q]  = [1, 5-xPos/100]
       x = p*Math.cos(p*t) + 3*q*Math.cos(q*t)
       y = -p*Math.sin(p*t) - 3*q*Math.sin(q*t)
       z = -8*Math.sin(4*t + 1.57)
+
+      x = p
+      y = 0
+      z = 0
       return {x, y, z}
+    
+    al = xPos/200
+    ph = y/200
+    slice_plane =
+      x: Math.sin(al)*Math.cos(ph)
+      y: Math.sin(al)*Math.sin(ph)
+      z: Math.cos(al)
+
+    console.log 'slice_plane', slice_plane
 
     param_curve = (t)->
-      [p, q]  = [1, 5-xPos/100]
+      [p, q]  = [1, -3]
 
       x = parser.get('x')(p,q,t)
       y = parser.get('y')(p,q,t)
@@ -86,9 +108,11 @@ export default class App extends React.Component
       #[a,b,c] = vxar
       vx = norm_v({x:vxar[0], y:vxar[1], z:vxar[2]})
       vy = norm_v({x:vyar[0], y:vyar[1], z:vyar[2]})
-      [a,b] = [vx.z, vy.z]
+      a = dot_prod vx, slice_plane
+      b = dot_prod vy, slice_plane
+      cos_ro = dot_prod vr, slice_plane
 
-      K = -vr.z/R/Math.sqrt(a*a + b*b)
+      K = -cos_ro/R/Math.sqrt(a*a + b*b)
       pcirc = (theta)->
         x = vr.x + R*(vx.x*mathjs.cos(theta) + vy.x*mathjs.sin(theta))
         y = vr.y + R*(vx.y*mathjs.cos(theta) + vy.y*mathjs.sin(theta))
@@ -100,7 +124,7 @@ export default class App extends React.Component
       theta2 = -acos_ + atan_
       {x,y} = pcirc(theta)
 
-        #console.log x,y,z, 'th', theta, K, t
+      #console.log x,y,z, 'th', theta, K, t
       return [{x,y}, pcirc(theta2)]
 
 
