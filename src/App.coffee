@@ -20,20 +20,15 @@ export default class App extends React.Component
     {x, y} = @state
     xPos = x
     R = 1
-    N = 140
+    N = 640
     trange = [0..N]
     T_scale = N
     path = ""
 
-    ###
     xfunc = 'x(p,q,t) = sin(p*t) + 3sin(q*t)'
     yfunc = 'y(p,q,t) = cos(p*t) + 3cos(q*t)'
     zfunc = "z(p,q,t) = 2cos(4*t+1.57)"
-    ###
 
-    xfunc = 'x(p,q,t) = 2p*t-2'
-    yfunc = 'y(p,q,t) = 0'
-    zfunc = 'z(p,q,t) = 0.5'
     parser = mathjs.parser()
     parser.evaluate(xfunc)
     parser.evaluate(yfunc)
@@ -71,9 +66,6 @@ export default class App extends React.Component
       y = -p*Math.sin(p*t) - 3*q*Math.sin(q*t)
       z = -8*Math.sin(4*t + 1.57)
 
-      x = p
-      y = 0
-      z = 0
       return {x, y, z}
     
     al = y/200
