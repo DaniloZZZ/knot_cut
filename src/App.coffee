@@ -76,8 +76,6 @@ export default class App extends React.Component
       z: Math.cos(al)
 
     console.log 'slice_plane', slice_plane
-    slice_plane  = {x: -0.7986034080020723, y: 0.005264991902397626, z: 0.6018345923821126}
-
 
     param_curve = (t)->
       [p, q]  = [1, -3]
@@ -135,24 +133,29 @@ export default class App extends React.Component
 
 
     [x0, y0, z0] = [width/2, height/2, 0]
-    current_batch = [[],[]]
+    current_batch = []
     for t in trange
       [p1, p2] = param_curve(t/T_scale*6.28)
       if not p1.x
         S = 50
-        for p in current_batch[0]
-          {x,y} = p
-          path += "#{x0 + x*S},#{y0 - y*S} "
-        for p in current_batch[1].reverse()
+        for p in current_batch
           {x,y} = p
           path += "#{x0 + x*S},#{y0 - y*S} "
 
         if path.length>0 and path[path.length-1]!='M'
           path +='z M'
-        current_batch = [[],[]]
+        current_batch = []
       else
-        current_batch[0].push p1
-        current_batch[1].push p2
+        current_batch.unshift p1
+        current_batch.push p2
+
+    S = 50
+    for p in current_batch
+      {x,y} = p
+      path += "#{x0 + x*S},#{y0 - y*S} "
+
+    if path.length>0 and path[path.length-1]!='M'
+      path +='z M'
 
     return path[..-2]
      
