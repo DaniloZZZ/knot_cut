@@ -12,6 +12,8 @@
     "clean": "rimraf ./dist/*"
   },
   "dependencies": {
+    "math": "^0.0.3",
+    "mathjs": "^7.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.0.0",
     "react-dom-factories": "^1.0.2"

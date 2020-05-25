@@ -84,14 +84,16 @@ export default class App extends React.Component
       y = parser.get('y')(p,q,t)
       z = parser.get('z')(p,q,t)
       vr = {x, y, z}
+
+      if dot_prod(vr, slice_plane) > R*1.5
+        p = x:NaN, y:NaN
+        dt = 0.05
+        return [p,p, dt]
+
       vz =  tangent_to_curve(t)
       collin = Math.abs dot_prod(slice_plane, norm_v(vz))
       W = 20
-      dt = W/(1 + W*collin) *.003
-      console.log dt
-      if dot_prod(vr, slice_plane)>R
-        p = x:NaN, y:NaN
-        return [p,p, dt]
+      dt = W/(1 + W*collin) *.002
 
       #vx = vec_prod(vr, vz)
       #vy = vec_prod(vz, vx)
