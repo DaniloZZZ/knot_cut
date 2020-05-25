@@ -4,6 +4,11 @@ Grab a banana, grab a knife, slice a banana, and look at the slice.
 
 Then grab linear algebra, knot theory, and coffeescript + react and create a slicing tool.
 
+More detailed describtion is under creation, but if you are interested, you can try understanding a draft below. 
+
+
+---
+
 ## Intro
 
 Knot is a closed line in 3 dimensions. The line can wind up in so many ways, that there exist a separate 
