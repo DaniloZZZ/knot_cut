@@ -4,7 +4,12 @@ Grab a banana, grab a knife, slice a banana, and look at the slice.
 
 Then grab linear algebra, knot theory, and coffeescript + react and create a slicing tool.
 
+![](screenshot.png)
+
+Live demo: https://lykov.tech/knots/
+
 More detailed describtion is under creation, but if you are interested, you can try understanding a draft below. 
+
 
 
 ---
